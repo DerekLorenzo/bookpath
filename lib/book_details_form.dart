@@ -542,25 +542,29 @@ class BookDetailsFormState extends State<BookDetailsForm> {
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     onPressed: () {
-                      final book = widget.currentBook;
-                      book.summary = _summaryController.text.isNotEmpty
-                          ? _summaryController.text
-                          : null;
-                      book.review = _reviewController.text.isNotEmpty
-                          ? _reviewController.text
-                          : null;
-                      book.rating = _rating != 0.0 ? _rating : null;
-                      book.readingStatus =
-                          _statusToReadingStatus[_statuses[_statusIndex]["status"]
-                              as String] ??
-                          BookReadingStatus.notStarted;
-                      book.quotes = _quotes.isNotEmpty
-                          ? List<String>.from(_quotes)
-                          : null;
-                      book.characters = _characters.isNotEmpty
-                          ? List<String>.from(_characters)
-                          : null;
-                      book.audit.updatedAt = DateTime.timestamp();
+                      final updatedBook = widget.currentBook.copyWith(
+                        summary: _summaryController.text.isNotEmpty
+                            ? _summaryController.text
+                            : null,
+                        review: _reviewController.text.isNotEmpty
+                            ? _reviewController.text
+                            : null,
+                        rating: _rating != 0.0 ? _rating : null,
+                        readingStatus:
+                            _statusToReadingStatus[_statuses[_statusIndex]["status"]
+                                as String] ??
+                            BookReadingStatus.notStarted,
+                        quotes: _quotes.isNotEmpty
+                            ? List<String>.from(_quotes)
+                            : null,
+                        characters: _characters.isNotEmpty
+                            ? List<String>.from(_characters)
+                            : null,
+                        audit: widget.currentBook.audit
+                          ..updatedAt = DateTime.timestamp(),
+                      );
+
+                      appState.updateBook(updatedBook);
 
                       if (widget.onBookUpdated != null) {
                         widget.onBookUpdated!();

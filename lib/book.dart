@@ -29,4 +29,18 @@ class Book {
     if (coverId.isEmpty) return '';
     return 'https://covers.openlibrary.org/b/id/$coverId-L.jpg';
   }
+
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'authors': authors,
+    'coverId': coverId,
+    'yearPublished': yearPublished,
+  };
+
+  factory Book.fromJson(Map<String, dynamic> json) => Book(
+    json['title'] as String,
+    (json['authors'] as List<dynamic>).cast<String>(),
+    json['coverId'] as String,
+    json['yearPublished'] as String,
+  );
 }
