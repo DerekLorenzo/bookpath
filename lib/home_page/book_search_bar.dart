@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:book_path/book.dart';
-import 'package:book_path/book_journal.dart';
-import 'package:book_path/my_app.dart';
+import 'package:book_path/core/app_state.dart';
+import 'package:book_path/models/book.dart';
+import 'package:book_path/models/book_journal.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -58,7 +58,7 @@ class _BookSearchBarState extends State<BookSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    MyAppState appState = context.watch<MyAppState>();
+    AppState appState = context.watch<AppState>();
     ThemeData theme = Theme.of(context);
 
     return Padding(
@@ -119,8 +119,36 @@ class _BookSearchBarState extends State<BookSearchBar> {
                       title: Text(book.title),
                       subtitle: Text(book.authors.join(', ')),
                       leading: book.coverId.isNotEmpty
-                          ? Image.network(book.coverUrl, width: 50)
-                          : Image.asset('assets/no_cover_found.png', width: 50),
+                          ? Image.network(
+                              book.coverUrl,
+                              width: 50,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: theme.colorScheme.primary,
+                                          value:
+                                              loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                            )
+                          : Image.asset(
+                              'assets/images/no_cover_found.png',
+                              width: 50,
+                            ),
                       onTap: () {
                         setState(() {
                           selectedBook = book;

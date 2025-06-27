@@ -1,20 +1,41 @@
-import 'package:book_path/book_search_bar.dart';
+import 'package:book_path/core/app_state.dart';
+import 'package:book_path/home_page/book_search_bar.dart';
+import 'package:book_path/home_page/parallax_recipe.dart';
+import 'package:book_path/info_page/info_page.dart';
 import 'package:flutter/material.dart';
-import 'package:book_path/my_app.dart';
 import 'package:provider/provider.dart';
-import 'package:book_path/parallax_flow.dart';
 
-class BookListPage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   final VoidCallback? onBookSelected;
 
-  const BookListPage({super.key, this.onBookSelected});
+  const HomePage({super.key, this.onBookSelected});
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    MyAppState appState = context.watch<MyAppState>();
+    AppState appState = context.watch<AppState>();
 
     return Scaffold(
+      appBar: (MediaQuery.of(context).size.width < 450)
+          ? AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.info_outline,
+                    color: Theme.of(context).hintColor.withOpacity(0.6),
+                  ),
+                  tooltip: 'Info',
+                  onPressed: () {
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (context) => InfoPage()));
+                  },
+                ),
+              ],
+            )
+          : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
           context: context,
@@ -29,12 +50,16 @@ class BookListPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Image.asset(
-                "assets/bookpath_banner_transparent.png",
-                width: MediaQuery.of(context).size.width * 0.6,
+            if (MediaQuery.of(context).size.width < 450)
+              Center(
+                child: Transform.translate(
+                  offset: const Offset(0, -24),
+                  child: Image.asset(
+                    "assets/images/bookpath_banner_transparent.png",
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
+                ),
               ),
-            ),
             (appState.bookList.isEmpty)
                 ? Expanded(
                     child: Center(

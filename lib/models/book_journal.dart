@@ -1,5 +1,5 @@
-import 'package:book_path/audit.dart';
-import 'package:book_path/book.dart';
+import 'package:book_path/models/audit.dart';
+import 'package:book_path/models/book.dart';
 
 class BookJournal {
   final Book book;

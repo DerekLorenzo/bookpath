@@ -1,6 +1,7 @@
-import 'package:book_path/book_journal.dart';
+import 'package:book_path/models/book_journal.dart';
 import 'package:flutter/material.dart';
-import 'package:book_path/parallax_flow.dart';
+import 'package:book_path/home_page/parallax_flow_delegate.dart';
+import 'dart:io';
 
 @immutable
 class BookListItem extends StatelessWidget {
@@ -10,14 +11,14 @@ class BookListItem extends StatelessWidget {
     required this.author,
     this.rating,
     required this.bookReadingStatus,
-    this.coverImageUrl,
+    this.coverImageAsset,
   });
 
   final String title;
   final String author;
   final double? rating;
   final BookReadingStatus bookReadingStatus;
-  final String? coverImageUrl;
+  final String? coverImageAsset;
   final GlobalKey _backgroundImageKey = GlobalKey();
 
   @override
@@ -54,6 +55,7 @@ class BookListItem extends StatelessWidget {
   }
 
   Widget _buildParallaxBackground(BuildContext context) {
+    print(coverImageAsset);
     return Flow(
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context),
@@ -61,14 +63,14 @@ class BookListItem extends StatelessWidget {
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
-        coverImageUrl != null && coverImageUrl!.isNotEmpty
-            ? Image.network(
-                coverImageUrl!,
+        (coverImageAsset != null && coverImageAsset?.isNotEmpty == true)
+            ? Image.file(
+                File(coverImageAsset!),
                 key: _backgroundImageKey,
                 fit: BoxFit.cover,
               )
             : Image.asset(
-                'assets/no_cover_found.png',
+                'assets/images/no_cover_found.png',
                 key: _backgroundImageKey,
                 fit: BoxFit.cover,
               ),

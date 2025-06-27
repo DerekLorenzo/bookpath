@@ -1,8 +1,9 @@
-import 'package:book_path/book_details_form.dart';
-import 'package:book_path/book_journal.dart';
+import 'package:book_path/core/app_state.dart';
+import 'package:book_path/details_page/book_details_form.dart';
+import 'package:book_path/models/book_journal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:book_path/my_app.dart';
+import 'dart:io';
 
 class BookDetailsPage extends StatefulWidget {
   final VoidCallback? onBookUpdated;
@@ -16,7 +17,7 @@ class BookDetailsPage extends StatefulWidget {
 class _BookDetailsPageState extends State<BookDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MyAppState>();
+    final appState = context.watch<AppState>();
     BookJournal? currentBook = appState.currentBook;
 
     return Scaffold(
@@ -28,12 +29,16 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
               (currentBook?.book != null)
                   ? Row(
                       children: [
-                        (currentBook?.book.coverUrl != null)
-                            ? Image.network(
-                                currentBook!.book.coverUrl,
+                        (currentBook?.coverImageAsset != null &&
+                                currentBook?.coverImageAsset.isNotEmpty == true)
+                            ? Image.file(
+                                File(currentBook!.coverImageAsset),
                                 width: MediaQuery.of(context).size.width * 0.33,
                               )
-                            : Image.asset("assets/no_cover_found.png"),
+                            : Image.asset(
+                                "assets/images/no_cover_found.png",
+                                width: MediaQuery.of(context).size.width * 0.33,
+                              ),
                         Expanded(
                           child: Center(
                             child: Padding(
