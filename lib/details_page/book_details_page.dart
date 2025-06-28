@@ -33,8 +33,8 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
         child: isWide
             ? Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
+                  Expanded(
+                    flex: 3,
                     child: BookDetailsSection(
                       currentBook: currentBook,
                       isWide: isWide,
@@ -42,6 +42,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                   ),
                   VerticalDivider(width: 1),
                   Expanded(
+                    flex: 6,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: detailsFormSection,

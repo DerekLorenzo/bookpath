@@ -96,26 +96,28 @@ class LandingPageState extends State<LandingPage> {
                             },
                           ),
                         ),
-                        // Info button at the bottom of the NavigationRail column (wide only)
                         if (constraints.maxWidth >=
                             bottomNavigationBarWidthThreshold)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.info_outline,
-                                color: Theme.of(
-                                  context,
-                                ).hintColor.withOpacity(0.6),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.info_outline,
+                                  color: Theme.of(
+                                    context,
+                                  ).hintColor.withOpacity(0.6),
+                                ),
+                                tooltip: 'Info',
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => InfoPage(),
+                                    ),
+                                  );
+                                },
                               ),
-                              tooltip: 'Info',
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => InfoPage(),
-                                  ),
-                                );
-                              },
                             ),
                           ),
                       ],
