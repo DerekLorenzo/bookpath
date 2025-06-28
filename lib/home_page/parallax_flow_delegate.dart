@@ -18,8 +18,17 @@ class ParallaxFlowDelegate extends FlowDelegate {
 
   @override
   void paintChildren(FlowPaintingContext context) {
-    final scrollableBox = scrollable.context.findRenderObject() as RenderBox;
-    final listItemBox = listItemContext.findRenderObject() as RenderBox;
+    final scrollableBox = scrollable.context.findRenderObject();
+    if (scrollableBox is! RenderBox) return;
+
+    final listItemBox = listItemContext.findRenderObject();
+    if (listItemBox is! RenderBox) return;
+
+    final backgroundContext = backgroundImageKey.currentContext;
+    if (backgroundContext == null) return;
+    final backgroundRenderObject = backgroundContext.findRenderObject();
+    if (backgroundRenderObject is! RenderBox) return;
+
     final listItemOffset = listItemBox.localToGlobal(
       listItemBox.size.centerLeft(Offset.zero),
       ancestor: scrollableBox,
@@ -33,14 +42,14 @@ class ParallaxFlowDelegate extends FlowDelegate {
 
     final verticalAlignment = Alignment(0.0, scrollFraction * 2 - 1);
 
-    final backgroundSize =
-        (backgroundImageKey.currentContext!.findRenderObject() as RenderBox)
-            .size;
+    final backgroundSize = backgroundRenderObject.size;
     final listItemSize = context.size;
     final childRect = verticalAlignment.inscribe(
       backgroundSize,
       Offset.zero & listItemSize,
     );
+
+    if (context.childCount == 0) return;
 
     context.paintChild(
       0,

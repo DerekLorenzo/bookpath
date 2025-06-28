@@ -25,26 +25,41 @@ class BookDetailsFormActionButtons extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    saveColor ?? Theme.of(context).colorScheme.primary,
-                foregroundColor:
-                    saveTextColor ?? Theme.of(context).colorScheme.onPrimary,
+            child: Tooltip(
+              message: 'Save changes',
+              child: Semantics(
+                button: true,
+                label: 'Save Book Details',
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        saveColor ?? Theme.of(context).colorScheme.primary,
+                    foregroundColor:
+                        saveTextColor ??
+                        Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  onPressed: onSave,
+                  child: const Text('Save'),
+                ),
               ),
-              onPressed: onSave,
-              child: const Text('Save'),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: deleteColor ?? Colors.redAccent,
-                foregroundColor: deleteTextColor ?? Colors.white,
+            child: Tooltip(
+              message: 'Delete book',
+              child: Semantics(
+                button: true,
+                label: 'Delete Book',
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: deleteColor ?? Colors.redAccent,
+                    foregroundColor: deleteTextColor ?? Colors.white,
+                  ),
+                  onPressed: onDelete,
+                  child: const Text('Delete'),
+                ),
               ),
-              onPressed: onDelete,
-              child: const Text('Delete'),
             ),
           ),
         ],

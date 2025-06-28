@@ -25,7 +25,6 @@ class QuoteDialog extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context, {'action': 'delete'});
-              Navigator.pop(context);
             },
             child: const Text(
               'Delete',

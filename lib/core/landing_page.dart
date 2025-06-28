@@ -1,6 +1,7 @@
 import 'package:book_path/details_page/book_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:book_path/home_page/home_page.dart';
+import 'package:book_path/info_page/info_page.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -95,6 +96,28 @@ class LandingPageState extends State<LandingPage> {
                             },
                           ),
                         ),
+                        // Info button at the bottom of the NavigationRail column (wide only)
+                        if (constraints.maxWidth >=
+                            bottomNavigationBarWidthThreshold)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.info_outline,
+                                color: Theme.of(
+                                  context,
+                                ).hintColor.withOpacity(0.6),
+                              ),
+                              tooltip: 'Info',
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => InfoPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                       ],
                     ),
                   ),

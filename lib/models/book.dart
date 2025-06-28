@@ -25,7 +25,6 @@ class Book {
       Object.hash(title, Object.hashAll(authors), yearPublished);
 
   String get coverUrl {
-    print(coverId);
     if (coverId.isEmpty) return '';
     return 'https://covers.openlibrary.org/b/id/$coverId-L.jpg';
   }

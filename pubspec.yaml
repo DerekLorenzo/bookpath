@@ -16,6 +16,8 @@ dependencies:
   http: ^1.4.0
   shared_preferences: ^2.5.3
   path_provider: ^2.1.5
+  mockito: ^5.4.6
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:

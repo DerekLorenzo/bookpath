@@ -12,6 +12,17 @@ class Audit {
     return 'BookJournal(${props.join(', ')})';
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Audit &&
+          runtimeType == other.runtimeType &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt;
+
+  @override
+  int get hashCode => Object.hash(createdAt, updatedAt);
+
   Map<String, dynamic> toJson() => {
     'createdAt': createdAt.toIso8601String(),
     'updatedAt': updatedAt.toIso8601String(),

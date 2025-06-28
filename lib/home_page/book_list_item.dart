@@ -23,20 +23,33 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              _buildParallaxBackground(context),
-              _buildGradient(),
-              _buildTitleAndSubtitle(context),
-              _buildStatusIndicator(),
-              _buildRatingIndicator(),
-            ],
+    return Tooltip(
+      message:
+          '$title by $author'
+          '${rating != null && rating != 0 ? ', rated $rating stars' : ''}'
+          ', status: ${bookReadingStatus.name.replaceAll(RegExp(r'([A-Z])'), ' \$1').toLowerCase()}',
+      child: Semantics(
+        label:
+            '$title by $author'
+            '${rating != null && rating != 0 ? ', rated $rating stars' : ''}'
+            ', status: ${bookReadingStatus.name.replaceAll(RegExp(r'([A-Z])'), ' \$1').toLowerCase()}',
+        button: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                children: [
+                  _buildParallaxBackground(context),
+                  _buildGradient(),
+                  _buildTitleAndSubtitle(context),
+                  _buildStatusIndicator(),
+                  _buildRatingIndicator(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -55,26 +68,38 @@ class BookListItem extends StatelessWidget {
   }
 
   Widget _buildParallaxBackground(BuildContext context) {
-    print(coverImageAsset);
+    Widget backgroundImage;
+
+    if (coverImageAsset != null && coverImageAsset?.isNotEmpty == true) {
+      final file = File(coverImageAsset!);
+      if (file.existsSync()) {
+        backgroundImage = Image.file(
+          File(coverImageAsset!),
+          key: _backgroundImageKey,
+          fit: BoxFit.cover,
+        );
+      } else {
+        backgroundImage = Image.asset(
+          'assets/images/no_cover_found.png',
+          key: _backgroundImageKey,
+          fit: BoxFit.cover,
+        );
+      }
+    } else {
+      backgroundImage = Image.asset(
+        'assets/images/no_cover_found.png',
+        key: _backgroundImageKey,
+        fit: BoxFit.cover,
+      );
+    }
+
     return Flow(
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context),
         listItemContext: context,
         backgroundImageKey: _backgroundImageKey,
       ),
-      children: [
-        (coverImageAsset != null && coverImageAsset?.isNotEmpty == true)
-            ? Image.file(
-                File(coverImageAsset!),
-                key: _backgroundImageKey,
-                fit: BoxFit.cover,
-              )
-            : Image.asset(
-                'assets/images/no_cover_found.png',
-                key: _backgroundImageKey,
-                fit: BoxFit.cover,
-              ),
-      ],
+      children: [backgroundImage],
     );
   }
 

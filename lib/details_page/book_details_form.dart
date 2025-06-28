@@ -103,8 +103,8 @@ class BookDetailsFormState extends State<BookDetailsForm> {
         if (result['action'] == 'save') {
           if (initial == null) {
             _quotes.add(result['value'] as String);
-          } else {
-            _quotes[index!] = result['value'] as String;
+          } else if (index != null && index >= 0 && index < _quotes.length) {
+            _quotes[index] = result['value'] as String;
           }
         } else if (result['action'] == 'delete') {
           _quotes.removeAt(index!);
@@ -128,7 +128,9 @@ class BookDetailsFormState extends State<BookDetailsForm> {
         if (result['action'] == 'save') {
           if (initial == null) {
             _characters.add(result['value'] as String);
-          } else if (index != null) {
+          } else if (index != null &&
+              index >= 0 &&
+              index < _characters.length) {
             _characters[index] = result['value'] as String;
           }
         } else if (result['action'] == 'delete' && index != null) {

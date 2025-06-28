@@ -12,7 +12,7 @@ class StarRatingSelector extends StatelessWidget {
     required this.onRatingChanged,
     this.starSize = 40.0,
     this.color,
-  });
+  }) : assert(rating >= 0 && rating <= 5, 'rating must be between 0 and 5');
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,9 @@ class StarRatingSelector extends StatelessWidget {
       double percent = localPosition.dx.clamp(0, totalWidth) / totalWidth;
       double newRating = (percent * 5).clamp(0, 5);
       newRating = (newRating * 2).round() / 2.0;
-      onRatingChanged(newRating);
+      if (newRating != rating) {
+        onRatingChanged(newRating);
+      }
     }
 
     return GestureDetector(

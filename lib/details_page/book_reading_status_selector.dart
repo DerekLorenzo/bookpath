@@ -10,7 +10,11 @@ class BookReadingStatusSelector extends StatelessWidget {
     required this.statusIndex,
     required this.statuses,
     required this.onStatusChanged,
-  });
+  }) : assert(statuses.length > 0, 'statuses list must not be empty'),
+       assert(
+         statusIndex >= 0 && statusIndex < statuses.length,
+         'statusIndex out of range',
+       );
 
   @override
   Widget build(BuildContext context) {

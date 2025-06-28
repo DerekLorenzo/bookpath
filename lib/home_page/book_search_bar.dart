@@ -11,13 +11,20 @@ class BookSearchBar extends StatefulWidget {
   const BookSearchBar({super.key});
 
   @override
-  _BookSearchBarState createState() => _BookSearchBarState();
+  BookSearchBarState createState() => BookSearchBarState();
 }
 
-class _BookSearchBarState extends State<BookSearchBar> {
+class BookSearchBarState extends State<BookSearchBar> {
   final TextEditingController _controller = TextEditingController();
-  Set<Book> _books = <Book>{};
+  List<Book> _books = [];
   Book? selectedBook;
+  bool _noResults = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> _getBooks() async {
     final query = _controller.text.trim();
@@ -32,21 +39,35 @@ class _BookSearchBarState extends State<BookSearchBar> {
 
         setState(() {
           _books.clear();
+          _noResults = false;
+          final seen = <String>{};
           for (final book in books) {
-            _books.add(
-              Book(
-                book['title'] as String,
-                List<String>.from(book['author_name'] ?? []),
-                book['cover_i']?.toString() ?? '',
-                book['first_publish_year']?.toString() ?? '',
-              ),
-            );
-            if (_books.length >= 10) {
-              break; // Limit to 10 books
+            final title = (book['title'] ?? '').toString().trim();
+            final authors = (book['author_name'] ?? []).join(',').trim();
+            final year = (book['first_publish_year'] ?? '').toString().trim();
+            final uniqueKey = '$title|$authors|$year';
+            if (!seen.contains(uniqueKey)) {
+              seen.add(uniqueKey);
+              _books.add(
+                Book(
+                  book['title'] as String,
+                  List<String>.from(book['author_name'] ?? []),
+                  book['cover_i']?.toString() ?? '',
+                  book['first_publish_year']?.toString() ?? '',
+                ),
+              );
             }
+            if (_books.length >= 10) break;
+          }
+          if (_books.isEmpty) {
+            _noResults = true;
           }
         });
-        print(_books);
+      } else {
+        setState(() {
+          _books.clear();
+          _noResults = true;
+        });
       }
     }
   }
@@ -90,72 +111,76 @@ class _BookSearchBarState extends State<BookSearchBar> {
             ),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: _books.length,
+              itemCount: _noResults ? 1 : _books.length,
               itemBuilder: (context, index) {
                 final book = _books.elementAt(index);
                 final isSelected = selectedBook == book;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedBook = book;
-                      print('Selected book: $selectedBook');
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    decoration: BoxDecoration(
-                      border: isSelected
-                          ? Border.all(
-                              color: theme.colorScheme.primary,
-                              width: 2,
-                            )
-                          : null,
-                      borderRadius: BorderRadius.circular(16),
-                      color: isSelected
-                          ? theme.colorScheme.primary.withOpacity(0.08)
-                          : Colors.transparent,
+                if (_noResults) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(
+                      child: Text(
+                        'No results found',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
-                    child: ListTile(
-                      title: Text(book.title),
-                      subtitle: Text(book.authors.join(', ')),
-                      leading: book.coverId.isNotEmpty
-                          ? Image.network(
-                              book.coverUrl,
-                              width: 50,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: theme.colorScheme.primary,
-                                          value:
+                  );
+                }
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    border: isSelected
+                        ? Border.all(color: theme.colorScheme.primary, width: 2)
+                        : null,
+                    borderRadius: BorderRadius.circular(16),
+                    color: isSelected
+                        ? theme.colorScheme.primary.withOpacity(0.08)
+                        : Colors.transparent,
+                  ),
+                  child: ListTile(
+                    title: Text(book.title),
+                    subtitle: Text(book.authors.join(', ')),
+                    leading: book.coverId.isNotEmpty
+                        ? Image.network(
+                            book.coverUrl,
+                            width: 50,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: theme.colorScheme.primary,
+                                    value:
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                  .cumulativeBytesLoaded /
                                               loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                            )
-                          : Image.asset(
-                              'assets/images/no_cover_found.png',
-                              width: 50,
-                            ),
-                      onTap: () {
-                        setState(() {
-                          selectedBook = book;
-                          print('Selected book: $selectedBook');
-                        });
-                      },
-                    ),
+                                                  .expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/no_cover_found.png',
+                                width: 50,
+                              );
+                            },
+                          )
+                        : Image.asset(
+                            'assets/images/no_cover_found.png',
+                            width: 50,
+                          ),
+                    onTap: () {
+                      setState(() {
+                        selectedBook = book;
+                        print('Selected book: $selectedBook');
+                      });
+                    },
                   ),
                 );
               },

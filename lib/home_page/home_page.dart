@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
           ? AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
+              scrolledUnderElevation: 0.0,
               actions: [
                 IconButton(
                   icon: Icon(
@@ -101,16 +102,35 @@ class HomePage extends StatelessWidget {
 
   Dialog _addBookDialog(BuildContext context) {
     return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[const Text('Add Book'), BookSearchBar()],
-            );
-          },
+      child: Semantics(
+        label: 'Add Book Dialog',
+        explicitChildNodes: true,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.85,
+              ),
+              child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Add Book',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        semanticsLabel: 'Add Book',
+                      ),
+                      const SizedBox(height: 16),
+                      BookSearchBar(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
