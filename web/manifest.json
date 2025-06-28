@@ -1,6 +1,6 @@
 {
-    "name": "book_journal",
-    "short_name": "book_journal",
+    "name": "book_path",
+    "short_name": "book_path",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
