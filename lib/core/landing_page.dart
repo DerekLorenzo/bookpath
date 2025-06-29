@@ -53,10 +53,10 @@ class LandingPageState extends State<LandingPage> {
           if (constraints.maxWidth < bottomNavigationBarWidthThreshold) {
             return mainArea;
           } else {
-            return Row(
-              children: [
-                SafeArea(
-                  child: SizedBox(
+            return SafeArea(
+              child: Row(
+                children: [
+                  SizedBox(
                     width: constraints.maxWidth >= navigationRailWidthThreshold
                         ? extendedNavigationRailWidth
                         : navigationRailWidth,
@@ -123,9 +123,9 @@ class LandingPageState extends State<LandingPage> {
                       ],
                     ),
                   ),
-                ),
-                Expanded(child: mainArea),
-              ],
+                  Expanded(child: mainArea),
+                ],
+              ),
             );
           }
         },

@@ -29,41 +29,35 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
         : const SizedBox.shrink();
 
     return Scaffold(
-      body: SafeArea(
-        child: isWide
-            ? Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: BookDetailsSection(
-                      currentBook: currentBook,
-                      isWide: isWide,
-                    ),
+      body: isWide
+          ? Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: BookDetailsSection(
+                    currentBook: currentBook,
+                    isWide: isWide,
                   ),
-                  VerticalDivider(width: 1),
-                  Expanded(
-                    flex: 6,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: detailsFormSection,
-                    ),
-                  ),
-                ],
-              )
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    BookDetailsSection(
-                      currentBook: currentBook,
-                      isWide: isWide,
-                    ),
-                    if (currentBook != null)
-                      Expanded(child: detailsFormSection),
-                  ],
                 ),
+                VerticalDivider(width: 1),
+                Expanded(
+                  flex: 6,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: detailsFormSection,
+                  ),
+                ),
+              ],
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  BookDetailsSection(currentBook: currentBook, isWide: isWide),
+                  if (currentBook != null) Expanded(child: detailsFormSection),
+                ],
               ),
-      ),
+            ),
     );
   }
 }

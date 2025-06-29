@@ -47,55 +47,53 @@ class HomePage extends StatelessWidget {
         shape: CircleBorder(),
         child: const Icon(Icons.add),
       ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (MediaQuery.of(context).size.width < 450)
-              Center(
-                child: Transform.translate(
-                  offset: const Offset(0, -24),
-                  child: Image.asset(
-                    "assets/images/bookpath_banner_transparent.png",
-                    width: MediaQuery.of(context).size.width * 0.6,
-                  ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (MediaQuery.of(context).size.width < 450)
+            Center(
+              child: Transform.translate(
+                offset: const Offset(0, -24),
+                child: Image.asset(
+                  "assets/images/bookpath_banner_transparent.png",
+                  width: MediaQuery.of(context).size.width * 0.6,
                 ),
               ),
-            (appState.bookList.isEmpty)
-                ? Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    _addBookDialog(context),
-                              ),
-                              child: Column(
-                                children: [
-                                  const Text('Add a book'),
-                                  const SizedBox(height: 8),
-                                  const Icon(Icons.add),
-                                ],
-                              ),
+            ),
+          (appState.bookList.isEmpty)
+              ? Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _addBookDialog(context),
                             ),
-                          ],
-                        ),
+                            child: Column(
+                              children: [
+                                const Text('Add a book'),
+                                const SizedBox(height: 8),
+                                const Icon(Icons.add),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                : Expanded(
-                    child: ParallaxRecipe(
-                      bookList: appState.sortedBookList,
-                      onBookSelected: onBookSelected,
-                    ),
                   ),
-          ],
-        ),
+                )
+              : Expanded(
+                  child: ParallaxRecipe(
+                    bookList: appState.sortedBookList,
+                    onBookSelected: onBookSelected,
+                  ),
+                ),
+        ],
       ),
     );
   }
