@@ -27,7 +27,7 @@ class LandingPageState extends State<LandingPage> {
     final int bottomNavigationBarWidthThreshold = 450;
     final int navigationRailWidthThreshold = 600;
     final double extendedNavigationRailWidth = 144;
-    final double navigationRailWidth = 72;
+    final double navigationRailWidth = 88;
 
     Widget page;
     switch (selectedIndex) {
@@ -67,11 +67,11 @@ class LandingPageState extends State<LandingPage> {
                           constraints.maxWidth > navigationRailWidthThreshold
                               ? Image.asset(
                                   "assets/images/bookpath_banner_transparent.png",
-                                  width: extendedNavigationRailWidth,
+                                  width: extendedNavigationRailWidth * .9,
                                 )
                               : Image.asset(
                                   "assets/images/bookpath_logo_small.png",
-                                  width: navigationRailWidth,
+                                  width: navigationRailWidth * 0.8,
                                 ),
                         Expanded(
                           child: NavigationRail(
