@@ -51,7 +51,7 @@ class LandingPageState extends State<LandingPage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth < bottomNavigationBarWidthThreshold) {
-            return mainArea;
+            return SafeArea(child: mainArea);
           } else {
             return SafeArea(
               child: Row(
